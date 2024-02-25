@@ -112,23 +112,7 @@ resource "aws_ecs_cluster" "my_cluster" {
 
 resource "aws_ecs_task_definition" "app_task" {
   family                   = "app-first-task" # Name your task
-  container_definitions    = <<DEFINITION
-  [
-    {
-      "name": "app-first-task",
-      "image": "docker.io/venom27/deployinator:latest",
-      "essential": true,
-      "portMappings": [
-        {
-          "containerPort": 80,
-          "hostPort": 80
-        }
-      ],
-      "memory": 512,
-      "cpu": 256
-    }
-  ]
-  DEFINITION
+  container_definitions    = file("${path.module}/../ecs/task-definition.json")
 
   requires_compatibilities = ["FARGATE"] # use Fargate as the launch type
   network_mode             = "awsvpc"    # add the AWS VPN network mode as this is required for Fargate
