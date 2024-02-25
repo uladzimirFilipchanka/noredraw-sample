@@ -10,7 +10,7 @@ on:
 
 env:
   # Flag to disable deploy step
-  DEPLOY_TO_DIGITAL_OCEAN: true
+  DEPLOY_TO_AWS: true
 
 # Disable parallel execution
 concurrency: release
@@ -58,20 +58,3 @@ jobs:
       # Pushing release tag only if everything before passed
       - name: Push Release Tag
         run: git push origin ${{env.RELEASE_VERSION}}
-      - name: Deploy to Digital Ocean
-        if: ${{ env.DEPLOY_TO_DIGITAL_OCEAN == 'true' }}
-        uses: digitalocean/app_action@main
-        with:
-          app_name: ${{ secrets.DIGITALOCEAN_APP_NAME }}
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          images: '[
-            {
-              "name": "deployinator-component",
-              "image":{
-                "registry": "${{ secrets.DOCKERHUB_USERNAME }}",
-                "registry_type": "DOCKER_HUB",
-                "repository": "deployinator",
-                "tag": "${{env.RELEASE_VERSION}}"
-              }
-            }
-          ]'
