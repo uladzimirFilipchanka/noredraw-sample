@@ -1,0 +1,18 @@
+# IDEs
+.idea/
+*.iml
+.vscode/
+**/bin/*
+
+# Gradle
+.gradle/
+
+# Build files
+.gradle
+build/
+out/
+*/*.out
+*/build
+
+# Mac
+.DS_Store
