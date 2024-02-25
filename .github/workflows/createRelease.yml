@@ -63,6 +63,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
         with:
           task-definition: ./ecs/task-definition.json
+          container-name: app-first-task
           image: docker.io/venom27/arch-diagram-sample:${{env.RELEASE_VERSION}}
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
