@@ -1,15 +1,49 @@
-[
-  {
-    "name": "app-first-task",
-    "image": "docker.io/venom27/arch-diagram-sample:latest",
-    "essential": true,
-    "portMappings": [
-      {
-        "containerPort": 80,
-        "hostPort": 80
-      }
-    ],
-    "memory": 256,
-    "cpu": 256
-  }
-]
+{
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:533266991285:task-definition/app-first-task:3",
+  "containerDefinitions": [
+    {
+      "name": "app-first-task",
+      "image": "docker.io/venom27/arch-diagram-sample:latest",
+      "cpu": 256,
+      "memory": 256,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ],
+  "family": "app-first-task",
+  "executionRoleArn": "arn:aws:iam::533266991285:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 3,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "registeredAt": "2024-02-25T20:27:01.804Z",
+  "registeredBy": "arn:aws:iam::533266991285:user/Terraform",
+  "tags": []
+}

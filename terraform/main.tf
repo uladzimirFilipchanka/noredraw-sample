@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "5.38.0"
     }
   }
@@ -46,7 +46,8 @@ resource "aws_default_subnet" "default_subnet_b" {
 resource "aws_alb" "application_load_balancer" {
   name               = "load-balancer-dev" #load balancer name
   load_balancer_type = "application"
-  subnets = [ # Referencing the default subnets
+  subnets            = [
+    # Referencing the default subnets
     aws_default_subnet.default_subnet_a.id,
     aws_default_subnet.default_subnet_b.id
   ]
@@ -73,9 +74,9 @@ resource "aws_security_group" "load_balancer_security_group" {
 
 resource "aws_security_group" "service_security_group" {
   ingress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
     # Only allowing traffic in from the load balancer security group
     security_groups = [aws_security_group.load_balancer_security_group.id]
   }
@@ -110,9 +111,29 @@ resource "aws_ecs_cluster" "my_cluster" {
   name = "app-cluster"
 }
 
+resource "template_file" "task_definition_template" {
+
+}
+
 resource "aws_ecs_task_definition" "app_task" {
-  family                   = "app-first-task" # Name your task
-  container_definitions    = file("${path.module}/../ecs/task-definition.json")
+  family                = "app-first-task" # Name your task
+  container_definitions = <<DEFINITION
+  [
+    {
+      "name": "app-first-task",
+      "image": "docker.io/venom27/arch-diagram-sample:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80
+        }
+      ],
+      "memory": 512,
+      "cpu": 256
+    }
+  ]
+  DEFINITION
 
   requires_compatibilities = ["FARGATE"] # use Fargate as the launch type
   network_mode             = "awsvpc"    # add the AWS VPN network mode as this is required for Fargate
@@ -125,8 +146,8 @@ resource "aws_ecs_service" "app_service" {
   name            = "app-first-service"     # Name the service
   cluster         = aws_ecs_cluster.my_cluster.id   # Reference the created Cluster
   task_definition = aws_ecs_task_definition.app_task.arn # Reference the task that the service will spin up
-  launch_type   = "FARGATE"
-  desired_count = 1 # Set up the number of containers to 3
+  launch_type     = "FARGATE"
+  desired_count   = 1 # Set up the number of containers to 3
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group.arn # Reference the target group
@@ -138,6 +159,10 @@ resource "aws_ecs_service" "app_service" {
     subnets          = [aws_default_subnet.default_subnet_a.id, aws_default_subnet.default_subnet_b.id]
     assign_public_ip = true     # Provide the containers with public IPs
     security_groups  = [aws_security_group.service_security_group.id] # Set up the security group
+  }
+
+  lifecycle {
+    ignore_changes = [aws_ecs_task_definition]
   }
 }
 
