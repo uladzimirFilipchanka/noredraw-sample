@@ -1,4 +1,4 @@
-package org.example;
+package org.creator;
 
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class VersionController {
     @PostConstruct
     private void printVersion() {
         // easily check version in logs
-        logger.info("You deployed me well! My version is {}", version);
+        logger.info("You  deployed me well! My version is {}", version);
     }
 
     @GetMapping("/version")

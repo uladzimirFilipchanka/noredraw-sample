@@ -52,8 +52,8 @@ jobs:
         with:
           context: .
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/arch-diagram-sample:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/arch-diagram-sample:${{env.RELEASE_VERSION}}
+            venom27/arch-diagram-sample:latest
+            venom27/arch-diagram-sample:${{env.RELEASE_VERSION}}
           push: true
       # Pushing release tag only if everything before passed
       - name: Push Release Tag
