@@ -95,6 +95,10 @@ resource "aws_lb_target_group" "target_group" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_default_vpc.default_vpc.id # default VPC
+
+  health_check {
+    path = "/version"
+  }
 }
 
 resource "aws_lb_listener" "listener" {
@@ -109,10 +113,6 @@ resource "aws_lb_listener" "listener" {
 
 resource "aws_ecs_cluster" "my_cluster" {
   name = "app-cluster"
-}
-
-resource "template_file" "task_definition_template" {
-
 }
 
 resource "aws_ecs_task_definition" "app_task" {
@@ -162,7 +162,7 @@ resource "aws_ecs_service" "app_service" {
   }
 
   lifecycle {
-    ignore_changes = [aws_ecs_task_definition]
+    ignore_changes = [task_definition]
   }
 }
 
