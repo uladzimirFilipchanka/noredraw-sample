@@ -70,7 +70,7 @@ jobs:
         with:
           task-definition: ./ecs/task-definition.json
           container-name: app-first-task
-#          image: venom27/arch-diagram-sample:${{env.RELEASE_VERSION}}
+          image: venom27/arch-diagram-sample:${{env.RELEASE_VERSION}}
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
